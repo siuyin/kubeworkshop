@@ -4,7 +4,7 @@ metadata:
   name: podinfo
   namespace: geekshacking
 spec:
-  gatewayClassName: cilium
+  gatewayClassName: traefik
   listeners:
   - name: http
     protocol: HTTP

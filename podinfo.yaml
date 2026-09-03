@@ -12,8 +12,8 @@ metadata:
   name: podinfo
   namespace: geekshacking
 data:
-  PODINFO_UI_COLOR: "#cc0099"
-  PODINFO_UI_MESSAGE: Gerbau Terpau
+  PODINFO_UI_COLOR: "#0033cc"
+  PODINFO_UI_MESSAGE: Hello World!
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,7 +46,7 @@ metadata:
   namespace: geekshacking
   name: podinfo
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: podinfo
   ports:
