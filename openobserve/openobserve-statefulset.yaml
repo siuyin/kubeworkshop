@@ -45,14 +45,13 @@ spec:
         - name: openobserve
           image: o2cr.ai/openobserve/openobserve:latest
           env:
-            - name: ZO_ROOT_USER_EMAIL
-              value: siuyin@beyondbroadcast.com
-            - name: ZO_ROOT_USER_PASSWORD
-              value: Brown#Fox#2
             - name: ZO_DATA_DIR
               value: /data
+          envFrom:
+          - secretRef:
+              name: openobserve
           # command: ["/bin/bash", "-c", "while true; do sleep 1; done"]
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               cpu: 4096m
