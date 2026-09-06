@@ -73,6 +73,10 @@ receivers:
     operators:
       - id: container-parser
         type: container
+      - id: drop-coredns-import-glob-warning
+        type: filter
+        expr: 'body contains "WARNING" and body contains "No files matching import glob pattern:"'
+        drop-ratio: 1.0
 service:
   extensions:
   - health_check
