@@ -45,6 +45,14 @@ receivers:
         endpoint: ${env:MY_POD_IP}:4317
       http:
         endpoint: ${env:MY_POD_IP}:4318
+  hostmetrics:
+    collection_interval: 20s
+    scrapers:
+      cpu:
+      memory:
+      disk:
+      load:
+      network:
   prometheus:
     config:
       scrape_configs:
@@ -86,6 +94,7 @@ service:
       receivers:
       - otlp
       - prometheus
+      - hostmetrics
     traces:
       exporters:
       - debug
