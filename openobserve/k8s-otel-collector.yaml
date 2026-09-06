@@ -67,6 +67,9 @@ receivers:
     include_file_path: true
     include:
       - /var/log/pods/*/*/*.log
+    exclude:
+      - /var/log/pods/*/opentelemetry-collector/*.log
+      - /var/log/pods/*/openobserve/*.log
     operators:
       - id: container-parser
         type: container
