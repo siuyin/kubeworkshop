@@ -55,6 +55,13 @@ receivers:
           - ${env:MY_POD_IP}:8888
   zipkin:
     endpoint: ${env:MY_POD_IP}:9411
+  filelog:
+    include_file_path: true
+    include:
+      - /var/log/pods/*/*/*.log
+    operators:
+      - id: container-parser
+        type: container
 service:
   extensions:
   - health_check
@@ -68,6 +75,7 @@ service:
       - batch
       receivers:
       - otlp
+      - filelog
     metrics:
       exporters:
       - debug
