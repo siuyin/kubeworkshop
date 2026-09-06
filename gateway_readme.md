@@ -36,6 +36,29 @@ spec:
         enabled: true
 ```
 
+### Setup custom port for traefik
+```
+# /var/lib/rancher/k3s/server/manifests/k3s-traefik-config.yaml
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
+    ports:
+      custom-9080:
+        port: 9080
+        expose:
+          default: true
+        exposedPort: 9080
+        protocol: TCP
+```
+
 ## Define gateway and route for a service
 For example, see `podinfo_gateway_and_route.yaml` and `podinfo.yaml`.
 

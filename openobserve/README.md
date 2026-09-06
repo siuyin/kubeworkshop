@@ -34,3 +34,11 @@ Restart the daemon set with: `k rollout restart daemonset.apps/otel-collector-op
 /h/exp/telemetrygen metrics --otlp-insecure --metrics 5
 /h/exp/telemetrygen logs --otlp-insecure --logs 3 --body "serpau merbau"
 ```
+
+## Install OBI
+```
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+
+helm install obi -n obi --create-namespace open-telemetry/opentelemetry-ebpf-instrumentation
+
+```
