@@ -30,6 +30,11 @@ processors:
     check_interval: 5s
     limit_percentage: 80
     spike_limit_percentage: 25
+  filter/drop-openobserve-traces:
+    error_mode: ignore
+    traces:
+      resource:
+        - 'attributes["service.name"] == "openobserve"'
 receivers:
   jaeger:
     protocols:
@@ -109,6 +114,7 @@ service:
       processors:
       - memory_limiter
       - batch
+      - filter/drop-openobserve-traces
       receivers:
       - otlp
       - jaeger
