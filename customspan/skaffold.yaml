@@ -1,0 +1,12 @@
+apiVersion: skaffold/v4beta14
+kind: Config
+metadata:
+  name: customspan
+build:
+  artifacts:
+    - image: siuyin/cspan
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - deployment.yaml

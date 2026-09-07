@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: cspan
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cspan
+  namespace: cspan
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cspan
+  template:
+    metadata:
+      labels:
+        app: cspan
+    spec:
+      containers:
+      - name: cspan-container
+        image: siuyin/cspan
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: cspan
+  name: cspan
+spec:
+  selector:
+    app: cspan
+  ports:
+  - port: 8080
+    targetPort: 8080
