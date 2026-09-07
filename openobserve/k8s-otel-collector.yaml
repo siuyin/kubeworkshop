@@ -22,6 +22,7 @@ data:
         traces:
           resource:
             - 'attributes["service.name"] == "openobserve"'
+
     receivers:
       jaeger:
         protocols:
@@ -72,6 +73,10 @@ data:
             type: filter
             expr: 'body contains "WARNING" and body contains "No files matching import glob pattern:"'
             drop-ratio: 1.0
+          - id: extract-trace-and-span-ids
+            type: regex_parser
+            regex: 'trace_id=(?P<trace_id>[a-f0-9]+)\s+span_id=(?P<span_id>[a-f0-9]+)'
+            parse_to: attributes
     service:
       extensions:
       - health_check
@@ -140,5 +145,5 @@ metadata:
     helm.sh/chart: opentelemetry-collector-0.172.1
   name: otel-collector-opentelemetry-collector-agent
   namespace: default
-  resourceVersion: "86044"
+  resourceVersion: "92805"
   uid: 9b67fa4f-70ab-483f-b554-88555fc04327
