@@ -4,7 +4,9 @@ import (
 	"context"
 	"io"
 	"log"
+	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/siuyin/dflt"
 	"go.opentelemetry.io/otel"
@@ -15,6 +17,7 @@ var tracer = otel.Tracer("custom-span-server")
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		ctx, span := tracer.Start(r.Context(), "/ entry")
+		slog.Info("/ entry", "path", r.URL.Path)
 		defer span.End()
 		io.WriteString(w, "/ entry\n")
 		subProc(ctx, w, r)
@@ -26,10 +29,9 @@ func main() {
 }
 
 func subProc(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	log.Println("subProc started")
 	_, span := tracer.Start(ctx, "subProc")
-	io.WriteString(w, "subProc\n")
-	log.Println(r)
 	defer span.End()
-	log.Println("subProc completed")
+	slog.Info("subProc", "started", time.Now())
+	io.WriteString(w, "subProc\n")
+	slog.Info("subProc", "completed", time.Now())
 }
