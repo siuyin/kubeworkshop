@@ -1,66 +1,160 @@
-Name:           otel-collector-opentelemetry-collector-agent
-Namespace:      default
-Selector:       app.kubernetes.io/instance=otel-collector,app.kubernetes.io/name=opentelemetry-collector,component=agent-collector
-Node-Selector:  <none>
-Labels:         app.kubernetes.io/component=agent-collector
-                app.kubernetes.io/instance=otel-collector
-                app.kubernetes.io/managed-by=Helm
-                app.kubernetes.io/name=opentelemetry-collector
-                app.kubernetes.io/part-of=opentelemetry-collector
-                app.kubernetes.io/version=0.159.0
-                helm.sh/chart=opentelemetry-collector-0.172.1
-Annotations:    deprecated.daemonset.template.generation: 11
-                meta.helm.sh/release-name: otel-collector
-                meta.helm.sh/release-namespace: default
-Desired Number of Nodes Scheduled: 1
-Current Number of Nodes Scheduled: 1
-Number of Nodes Scheduled with Up-to-date Pods: 1
-Number of Nodes Scheduled with Available Pods: 1
-Number of Nodes Misscheduled: 0
-Pods Status:  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
-Pod Template:
-  Labels:           app.kubernetes.io/instance=otel-collector
-                    app.kubernetes.io/name=opentelemetry-collector
-                    component=agent-collector
-  Annotations:      checksum/config: 5d0f72a9a322379f9ea654d92729a6afb979d812780d2aa6f71425f43637eee2
-                    kubectl.kubernetes.io/restartedAt: 2026-09-06T12:10:46+08:00
-  Service Account:  otel-collector-opentelemetry-collector
-  Containers:
-   opentelemetry-collector:
-    Image:       otel/opentelemetry-collector-k8s:0.159.0
-    Ports:       6831/UDP (jaeger-compact), 14250/TCP (jaeger-grpc), 14268/TCP (jaeger-thrift), 4317/TCP (otlp), 4318/TCP (otlp-http), 9411/TCP (zipkin)
-    Host Ports:  6831/UDP (jaeger-compact), 14250/TCP (jaeger-grpc), 14268/TCP (jaeger-thrift), 4317/TCP (otlp), 4318/TCP (otlp-http), 9411/TCP (zipkin)
-    Args:
-      --config=/conf/relay.yaml
-    Liveness:   http-get http://:13133/ delay=0s timeout=1s period=10s successThreshold=1 failureThreshold=3
-    Readiness:  http-get http://:13133/ delay=0s timeout=1s period=10s successThreshold=1 failureThreshold=3
-    Environment:
-      MY_POD_IP:            (v1:status.podIP)
-      OTEL_K8S_NODE_NAME:   (v1:spec.nodeName)
-      OTEL_K8S_NODE_IP:     (v1:status.hostIP)
-      OTEL_K8S_NAMESPACE:   (v1:metadata.namespace)
-      OTEL_K8S_POD_NAME:    (v1:metadata.name)
-      OTEL_K8S_POD_IP:      (v1:status.podIP)
-    Mounts:
-      /conf from opentelemetry-collector-configmap (rw)
-      /var/log from varlog (ro)
-  Volumes:
-   varlog:
-    Type:          HostPath (bare host directory volume)
-    Path:          /var/log
-    HostPathType:  
-   opentelemetry-collector-configmap:
-    Type:          ConfigMap (a volume populated by a ConfigMap)
-    Name:          otel-collector-opentelemetry-collector-agent
-    Optional:      false
-  Node-Selectors:  <none>
-  Tolerations:     <none>
-Events:
-  Type    Reason            Age   From                  Message
-  ----    ------            ----  ----                  -------
-  Normal  SuccessfulDelete  65m   daemonset-controller  Deleted pod: otel-collector-opentelemetry-collector-agent-rq6zf
-  Normal  SuccessfulCreate  65m   daemonset-controller  Created pod: otel-collector-opentelemetry-collector-agent-jxb2w
-  Normal  SuccessfulDelete  50m   daemonset-controller  Deleted pod: otel-collector-opentelemetry-collector-agent-jxb2w
-  Normal  SuccessfulCreate  50m   daemonset-controller  Created pod: otel-collector-opentelemetry-collector-agent-nj49p
-  Normal  SuccessfulDelete  50m   daemonset-controller  Deleted pod: otel-collector-opentelemetry-collector-agent-nj49p
-  Normal  SuccessfulCreate  50m   daemonset-controller  Created pod: otel-collector-opentelemetry-collector-agent-ljvn6
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "6"
+    meta.helm.sh/release-name: otel-collector
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2026-09-12T02:08:39Z"
+  generation: 6
+  labels:
+    app.kubernetes.io/component: agent-collector
+    app.kubernetes.io/instance: otel-collector
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/part-of: opentelemetry-collector
+    app.kubernetes.io/version: 0.159.0
+    helm.sh/chart: opentelemetry-collector-0.172.1
+  name: otel-collector-opentelemetry-collector-agent
+  namespace: default
+  resourceVersion: "170699"
+  uid: 60580502-39b1-42a2-8595-8185d02f9d2c
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: otel-collector
+      app.kubernetes.io/name: opentelemetry-collector
+      component: agent-collector
+  template:
+    metadata:
+      annotations:
+        checksum/config: 5d0f72a9a322379f9ea654d92729a6afb979d812780d2aa6f71425f43637eee2
+        kubectl.kubernetes.io/restartedAt: "2026-09-12T10:44:20+08:00"
+      labels:
+        app.kubernetes.io/instance: otel-collector
+        app.kubernetes.io/name: opentelemetry-collector
+        component: agent-collector
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - args:
+        - --config=/conf/relay.yaml
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: OTEL_K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: OTEL_K8S_NODE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        - name: OTEL_K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: OTEL_K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: OTEL_K8S_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        image: otel/opentelemetry-collector-k8s:0.159.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 13133
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: opentelemetry-collector
+        ports:
+        - containerPort: 6831
+          hostPort: 6831
+          name: jaeger-compact
+          protocol: UDP
+        - containerPort: 14250
+          hostPort: 14250
+          name: jaeger-grpc
+          protocol: TCP
+        - containerPort: 14268
+          hostPort: 14268
+          name: jaeger-thrift
+          protocol: TCP
+        - containerPort: 4317
+          hostPort: 4317
+          name: otlp
+          protocol: TCP
+        - containerPort: 4318
+          hostPort: 4318
+          name: otlp-http
+          protocol: TCP
+        - containerPort: 9411
+          hostPort: 9411
+          name: zipkin
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 13133
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        securityContext: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /conf
+          name: opentelemetry-collector-configmap
+        - mountPath: /var/log
+          name: varlog
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: otel-collector-opentelemetry-collector
+      serviceAccountName: otel-collector-opentelemetry-collector
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /var/log
+          type: ""
+        name: varlog
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: relay
+            path: relay.yaml
+          name: otel-collector-opentelemetry-collector-agent
+        name: opentelemetry-collector-configmap
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 1
+  desiredNumberScheduled: 1
+  numberAvailable: 1
+  numberMisscheduled: 0
+  numberReady: 1
+  observedGeneration: 6
+  updatedNumberScheduled: 1
