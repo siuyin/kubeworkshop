@@ -54,6 +54,31 @@ data:
             static_configs:
             - targets:
               - ${env:MY_POD_IP}:8888
+          - job_name: kubernetes-pods
+            scrape_interval: 15s
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+                action: keep
+                regex: "true"
+              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+                action: replace
+                target_label: __metrics_path__
+                regex: (.+)
+              - source_labels: [address, __meta_kubernetes_pod_annotation_prometheus_io_port]
+                action: replace
+                regex: ([^:]+)(?::\d+)?;(\d+)
+                replacement: $1:$2
+                target_label: __address__
+              - action: labelmap
+                regex: __meta_kubernetes_pod_label_(.+)
+              - source_labels: [__meta_kubernetes_namespace]
+                action: replace
+                target_label: kubernetes_namespace
+              - source_labels: [__meta_kubernetes_pod_name]
+                action: replace
+                target_label: kubernetes_pod_name
       zipkin:
         endpoint: ${env:MY_POD_IP}:9411
       filelog:
@@ -145,5 +170,5 @@ metadata:
     helm.sh/chart: opentelemetry-collector-0.172.1
   name: otel-collector-opentelemetry-collector-agent
   namespace: default
-  resourceVersion: "92805"
+  resourceVersion: "135626"
   uid: 9b67fa4f-70ab-483f-b554-88555fc04327

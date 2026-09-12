@@ -19,12 +19,14 @@ go install github.com/open-telemetry/opentelemetry-collector-contrib/cmd/telemet
 ```
 
 ## Configure the collector
-See `otelconfig.yaml`.
+See `otel-external-config.yaml`.
 
 Run it with: `otc --config=file:/h/exp/kubeworkshop/openobserve/otelconfig.yaml`
 
-## Configure the daemon set
-See `openobserve/otel-collector-agent-daemonset.yaml`
+There is also a otel collector running within kubernetes. See daemon set below.
+
+### Configure the daemon set
+See `openobserve/otel-collector-agent-daemonset.yaml` and `openobserve/otel-k8s-collector.yaml`.
 
 Restart the daemon set with: `k rollout restart daemonset.apps/otel-collector-opentelemetry-collector-agent`
 
