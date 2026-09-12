@@ -24,6 +24,13 @@ See `otel-external-config.yaml`.
 Run it with: `otc --config=file:/h/exp/kubeworkshop/openobserve/otelconfig.yaml`
 
 There is also a otel collector running within kubernetes. See daemon set below.
+This was installed with:
+```
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm install otel-collector open-telemetry/opentelemetry-collector \
+   --set image.repository="otel/opentelemetry-collector-k8s" \
+   --set mode=daemonset
+```
 
 ### Configure the daemon set
 See `openobserve/otel-collector-agent-daemonset.yaml` and `openobserve/otel-k8s-collector.yaml`.
@@ -44,3 +51,11 @@ helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm
 helm install obi -n obi --create-namespace open-telemetry/opentelemetry-ebpf-instrumentation
 
 ```
+
+## Install OpenObserve (datadog workalike)
+```
+kubectl apply -f https://raw.githubusercontent.com/zinclabs/openobserve/main/deploy/k8s/statefulset.yaml
+```
+
+### Optional: Install garage (S3 object storage)
+See: `https://garagehq.deuxfleurs.fr/documentation/cookbook/kubernetes/`
