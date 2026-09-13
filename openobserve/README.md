@@ -32,8 +32,13 @@ helm install otel-collector open-telemetry/opentelemetry-collector \
    --set mode=daemonset -f otel-values.yaml
 ```
 
-### Configure the daemon set
-See `openobserve/otel-collector-agent-daemonset.yaml` and `openobserve/otel-k8s-collector.yaml`.
+### Configure the helm deployment
+Edit: `openobserve/otel-values.yaml` and update with:
+```
+helm update otel-collector open-telemetry/opentelemetry-collector \
+   --set image.repository="otel/opentelemetry-collector-k8s" \
+   --set mode=daemonset -f otel-values.yaml
+```
 
 Restart the daemon set with: `k rollout restart daemonset.apps/otel-collector-opentelemetry-collector-agent`
 
@@ -55,6 +60,16 @@ helm install obi -n obi --create-namespace open-telemetry/opentelemetry-ebpf-ins
 ## Install OpenObserve (datadog workalike)
 ```
 kubectl apply -f https://raw.githubusercontent.com/zinclabs/openobserve/main/deploy/k8s/statefulset.yaml
+```
+
+### Notes on OpenObserve authentication
+Root user and root password are stored in the persistent volume in namespace openobserve.
+This is written the first time the user logs in. It is **not** updated if the user or password is changed.
+
+To overwrite:
+```
+kubectl -nopenobserve get pv,pvc
+kubectl delete <appropriate pvc>
 ```
 
 ### Optional: Install garage (S3 object storage)
