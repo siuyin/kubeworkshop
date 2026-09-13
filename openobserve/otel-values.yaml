@@ -266,6 +266,11 @@ config:
             static_configs:
               - targets:
                   - ${env:MY_POD_IP}:8888
+          - job_name: podinfo
+            scrape_interval: 10s
+            static_configs:
+              - targets:
+                  - podinfo.geekshacking:8080
     zipkin:
       endpoint: ${env:MY_POD_IP}:9411
     file_log:

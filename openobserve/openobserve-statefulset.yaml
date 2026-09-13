@@ -47,6 +47,8 @@ spec:
           env:
             - name: ZO_DATA_DIR
               value: /data
+            - name: ZO_COMPACT_DATA_RETENTION_DAYS
+              value: '3'
           envFrom:
           - secretRef:
               name: openobserve
