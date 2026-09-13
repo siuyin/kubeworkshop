@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cspan
+  namespace: cspan
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 9080
+    allowedRoutes:
+      namespaces:
+        from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: cspan
+  namespace: cspan
+spec:
+  parentRefs:
+  - name: cspan
+  hostnames:
+  - "cspan.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: cspan
+      port: 8080
