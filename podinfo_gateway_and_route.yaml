@@ -21,6 +21,8 @@ metadata:
 spec:
   parentRefs:
   - name: podinfo
+  hostnames:
+  - "podinfo.local"
   rules:
   - matches:
     - path:
