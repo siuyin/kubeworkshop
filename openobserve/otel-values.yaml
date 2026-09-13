@@ -332,6 +332,7 @@ config:
         processors:
           - memory_limiter
           - batch
+          - filter/drop-openobserve-traces
         receivers:
           - otlp
           - jaeger
