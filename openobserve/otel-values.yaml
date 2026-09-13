@@ -237,6 +237,11 @@ config:
       limit_percentage: 80
       # By default spike_limit_mib is set to 25% of ".Values.resources.limits.memory"
       spike_limit_percentage: 25
+    filter/drop-openobserve-traces:
+      error_mode: ignore
+      traces:
+        resource:
+          - 'attributes["service.name"] == "openobserve"'
   receivers:
     jaeger:
       protocols:
