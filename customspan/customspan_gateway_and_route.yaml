@@ -22,7 +22,7 @@ spec:
   parentRefs:
   - name: cspan
   hostnames:
-  - "cspan.local"
+  - "cspan.localhost"
   rules:
   - matches:
     - path:

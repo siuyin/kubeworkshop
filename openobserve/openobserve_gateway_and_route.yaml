@@ -22,7 +22,7 @@ spec:
   parentRefs:
   - name: openobserve
   hostnames:
-  - "openobserve.local"
+  - "openobserve.localhost"
   rules:
   - matches:
     - path:

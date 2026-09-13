@@ -22,7 +22,7 @@ spec:
   parentRefs:
   - name: podinfo
   hostnames:
-  - "podinfo.local"
+  - "podinfo.localhost"
   rules:
   - matches:
     - path:
