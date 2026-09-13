@@ -24,7 +24,7 @@ func main() {
 	})
 
 	port := dflt.EnvString("PORT", "8080")
-	log.Println("Starting server. PORT=", port)
+	slog.Info("Starting server", "PORT", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
